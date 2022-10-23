@@ -4,6 +4,13 @@ export function getContext(): SRGPGlobalContext {
     return (window as any).SRGP_global;
 }
 
+export function updateContext(overrides: any) {
+    (window as any).SRGP_global = {
+        ...(window as any).SRGP_global,
+        ...overrides,
+    };
+}
+
 export function invertCoords(x: number, y: number) {
     const context = getContext();
     return {
