@@ -1,6 +1,6 @@
-import { Point, SRGPGloalContext } from "./interfaces";
+import { Point, SRGPGlobalContext } from "./interfaces";
 
-export function getContext(): SRGPGloalContext {
+export function getContext(): SRGPGlobalContext {
     return (window as any).SRGP_global;
 }
 
@@ -14,8 +14,4 @@ export function invertCoords(x: number, y: number) {
 
 export function invertPoint(pt: Point) {
     return invertCoords(pt.x, pt.y);
-}
-
-export function point(x: number, y: number): Point {
-    return { x, y };
 }
