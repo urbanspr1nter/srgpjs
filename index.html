@@ -2,15 +2,35 @@
 <html>
     <head>
         <title></title>
+        <!-- Google Fonts -->
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+        />
+
+        <!-- CSS Reset -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+        />
+
+        <!-- Milligram CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
+        />
+
         <style>
             body {
                 font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             }
+            div.row {
+                margin-bottom: 4px;
+            }
             div.canvas-wrapper {
-                margin: 8 8 8 8;
                 border: 1px solid black;
-                max-width: 512px;
-                max-height: 384px;
+                max-width: 514px;
+                max-height: 386px;
             }
             canvas {
                 width: 512px;
@@ -19,21 +39,58 @@
         </style>
     </head>
     <body>
-        <h2>Canvas</h2>
-        <div class="canvas-wrapper">
-            <canvas id="screen"></canvas>
-        </div>
-        <h3>Demos</h3>
-        <div class="demo-wrapper">
-            <button type="button" data-demoName="drawChart">drawChart</button>
-            <button type="button" data-demoName="drawBowtie">drawBowtie</button>
-            <button type="button" data-demoName="drawRectangle">
-                drawRectangle
-            </button>
-            <button type="button" data-demoName="drawEllipse">
-                drawEllipse
-            </button>
-            <button type="button" data-demoName="drawLines">drawLines</button>
+        <div class="container">
+            <div class="row">
+                <div class="column">
+                    <h2>Canvas</h2>
+
+                    <div class="canvas-wrapper">
+                        <canvas id="screen"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <h3>Demos</h3>
+                    <div class="toolbar">
+                        <button
+                            type="button"
+                            class="button"
+                            data-demoName="drawChart"
+                        >
+                            drawChart
+                        </button>
+                        <button
+                            type="button"
+                            class="button"
+                            data-demoName="drawBowtie"
+                        >
+                            drawBowtie
+                        </button>
+                        <button
+                            type="button"
+                            class="button"
+                            data-demoName="drawRectangle"
+                        >
+                            drawRectangle
+                        </button>
+                        <button
+                            type="button"
+                            class="button"
+                            data-demoName="drawEllipse"
+                        >
+                            drawEllipse
+                        </button>
+                        <button
+                            type="button"
+                            class="button"
+                            data-demoName="drawLines"
+                        >
+                            drawLines
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <script src="build/index.js"></script>
     </body>
