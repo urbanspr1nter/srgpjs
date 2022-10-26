@@ -1,6 +1,7 @@
 import { ColorTable } from "./constants";
 import {
     ColorIndex,
+    DrawStyle,
     LineStyle,
     MarkerStyle,
     SRGPGlobalContext,
@@ -83,6 +84,10 @@ function SRGP_setColor(colorIndex: ColorIndex) {
     const { context } = getContext();
     context.strokeStyle = ColorTable[colorIndex];
 }
+
+function SRGP_setFillBitmapPattern(pattern: DrawStyle) {}
+
+function SRGP_setBackgroundColor(colorIndex: ColorIndex) {}
 
 // demo programs
 function drawChart() {
