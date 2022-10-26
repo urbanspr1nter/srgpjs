@@ -51,3 +51,10 @@ export enum ColorIndex {
     YellowOrange,
     RedViolet,
 }
+
+export enum DrawStyle {
+    Solid,
+    BitmapPatternOpaque,
+    BitmapPatternTransparent,
+    PixmapPattern,
+}
