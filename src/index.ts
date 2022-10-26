@@ -162,7 +162,7 @@ function onDemoClicked(e: Event) {
     }
 }
 
-const buttons = document.querySelectorAll("div[class='demo-wrapper'] > button");
+const buttons = document.querySelectorAll("div[class='toolbar'] .button");
 buttons.forEach((b: HTMLButtonElement) =>
     b.addEventListener("click", onDemoClicked),
 );
