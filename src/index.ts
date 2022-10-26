@@ -1,10 +1,31 @@
-import { Point, SRGPGloalContext } from "./interfaces";
-import { getContext, invertCoords, point } from "./utils";
+import { ColorTable } from "./constants";
+import {
+    ColorIndex,
+    LineStyle,
+    MarkerStyle,
+    SRGPGlobalContext,
+} from "./interfaces";
+import { SRGP_ellipseArc } from "./SRGP_ellipse";
+import { SRGP_line, SRGP_lineCoord } from "./SRGP_line";
+import {
+    SRGP_markerCoord,
+    SRGP_setMarkerSize,
+    SRGP_setMarkerStyle,
+} from "./SRGP_marker";
+import { SRGP_defPoint } from "./SRGP_point";
+import { SRGP_polygon } from "./SRGP_polygon";
+import { SRGP_polyLineCoord } from "./SRGP_polyLine";
+import { SRGP_polyMarkerCoord } from "./SRGP_polyMarker";
+import { SRGP_defRectangle, SRGP_rectangle } from "./SRGP_rectangle";
+import { getContext } from "./utils";
 
-// Initialization stuff
+// Initialization
 const SRGP_out: HTMLCanvasElement = document.getElementById(
     "screen",
 ) as HTMLCanvasElement;
+
+SRGP_out.width = 512;
+SRGP_out.height = 384;
 
 if (!SRGP_out) {
     throw Error("Couldn't find the main output");
@@ -20,28 +41,128 @@ if (!SRGP_context) {
     context: SRGP_context,
     width: SRGP_out.width,
     height: SRGP_out.height,
-} as SRGPGloalContext;
+} as SRGPGlobalContext;
 
-// SRGP_line
-function SRGP_lineCoord(x1: number, y1: number, x2: number, y2: number) {
-    const { x: _x1, y: _y1 } = invertCoords(x1, y1);
+function clearScreen() {
+    const { out, context } = getContext();
+    const fillStyle = context.fillStyle;
+    context.fillStyle = ColorTable[ColorIndex.White];
+    context.fillRect(0, 0, out.width, out.height);
+    context.fillStyle = fillStyle;
+}
 
-    const { x: _x2, y: _y2 } = invertCoords(x2, y2);
+function reset() {
+    clearScreen();
+    SRGP_setLineStyle(LineStyle.CONTINUOUS);
+    SRGP_setColor(ColorIndex.Black);
+    SRGP_setLineWidth(1);
+}
 
+function SRGP_setLineStyle(style: LineStyle) {
     const { context } = getContext();
-
-    context.moveTo(_x1, _y1);
-    context.lineTo(_x2, _y2);
-
-    context.stroke();
+    switch (style) {
+        case LineStyle.DASHED:
+            context.setLineDash([4, 4]);
+            break;
+        case LineStyle.DOTTED:
+            context.setLineDash([2, 2]);
+            break;
+        case LineStyle.CONTINUOUS:
+        default:
+            context.setLineDash([]);
+            break;
+    }
 }
 
-function SRGP_line(pt1: Point, pt2: Point) {
-    SRGP_lineCoord(pt1.x, pt1.y, pt2.x, pt2.y);
+function SRGP_setLineWidth(width: number) {
+    const { context } = getContext();
+    context.lineWidth = width;
 }
 
-function main() {
-    SRGP_line(point(0, 0), point(100, 300));
+function SRGP_setColor(colorIndex: ColorIndex) {
+    const { context } = getContext();
+    context.strokeStyle = ColorTable[colorIndex];
 }
 
-main();
+// demo programs
+function drawChart() {
+    const xArray = [200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310];
+    const yArray = [145, 160, 270, 150, 145, 250, 260, 130, 145, 210, 230, 220];
+    SRGP_setMarkerSize(4);
+    SRGP_setMarkerStyle(MarkerStyle.CIRCLE);
+    SRGP_line(SRGP_defPoint(175, 200), SRGP_defPoint(320, 200));
+    SRGP_line(SRGP_defPoint(200, 140), SRGP_defPoint(200, 280));
+    SRGP_polyLineCoord(12, xArray, yArray);
+    SRGP_polyMarkerCoord(12, xArray, yArray);
+}
+
+function drawBowtie() {
+    const vertices = [
+        SRGP_defPoint(100, 100),
+        SRGP_defPoint(100, 60),
+        SRGP_defPoint(120, 76),
+        SRGP_defPoint(140, 60),
+        SRGP_defPoint(140, 100),
+        SRGP_defPoint(120, 84),
+        SRGP_defPoint(100, 100),
+    ];
+    SRGP_polygon(vertices.length, vertices);
+}
+
+function drawRectangle() {
+    SRGP_rectangle(SRGP_defRectangle(50, 25, 225, 125));
+}
+
+function drawEllipse() {
+    SRGP_rectangle(SRGP_defRectangle(50, 25, 225, 125));
+    SRGP_ellipseArc(
+        SRGP_defRectangle(50, 25, 225, 125),
+        Math.PI / 4,
+        1.5 * Math.PI,
+    );
+}
+
+function drawLines() {
+    SRGP_setLineWidth(5);
+    SRGP_setLineStyle(LineStyle.CONTINUOUS);
+    SRGP_lineCoord(55, 5, 55, 295);
+
+    SRGP_setLineStyle(LineStyle.DASHED);
+    SRGP_setLineWidth(10);
+    SRGP_lineCoord(105, 5, 155, 295);
+
+    SRGP_setLineStyle(LineStyle.DOTTED);
+    SRGP_setLineWidth(15);
+    SRGP_lineCoord(155, 5, 285, 255);
+}
+
+function onDemoClicked(e: Event) {
+    reset();
+
+    const target = e.target as HTMLButtonElement;
+    const demoName = target.dataset["demoname"];
+    switch (demoName) {
+        case "drawChart":
+            drawChart();
+            break;
+        case "drawBowtie":
+            drawBowtie();
+            break;
+        case "drawRectangle":
+            drawRectangle();
+            break;
+        case "drawEllipse":
+            drawEllipse();
+            break;
+        case "drawLines":
+            drawLines();
+            break;
+        default:
+            break;
+    }
+}
+
+const buttons = document.querySelectorAll("div[class='demo-wrapper'] > button");
+buttons.forEach((b: HTMLButtonElement) =>
+    b.addEventListener("click", onDemoClicked),
+);
