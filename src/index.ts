@@ -87,7 +87,11 @@ function SRGP_setColor(colorIndex: ColorIndex) {
 
 function SRGP_setFillBitmapPattern(pattern: DrawStyle) {}
 
-function SRGP_setBackgroundColor(colorIndex: ColorIndex) {}
+function SRGP_setBackgroundColor(colorIndex: ColorIndex) {
+    const { context, out } = getContext();
+    context.fillStyle = `${ColorTable[colorIndex]}`;
+    context.fillRect(0, 0, out.width, out.height);
+}
 
 // demo programs
 function drawChart() {
@@ -161,6 +165,12 @@ function onDemoClicked(e: Event) {
             break;
         case "drawLines":
             drawLines();
+            break;
+        case "setBackgroundRed":
+            SRGP_setBackgroundColor(ColorIndex.Red);
+            break;
+        case "setBackgroundGreen":
+            SRGP_setBackgroundColor(ColorIndex.Green);
             break;
         default:
             break;
