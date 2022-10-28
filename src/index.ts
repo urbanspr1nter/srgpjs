@@ -18,7 +18,7 @@ import { SRGP_polygon } from "./SRGP_polygon";
 import { SRGP_polyLineCoord } from "./SRGP_polyLine";
 import { SRGP_polyMarkerCoord } from "./SRGP_polyMarker";
 import { SRGP_defRectangle, SRGP_rectangle } from "./SRGP_rectangle";
-import { getContext } from "./utils";
+import { getContext, updateContext } from "./utils";
 
 // Initialization
 const SRGP_out: HTMLCanvasElement = document.getElementById(
@@ -60,16 +60,25 @@ function reset() {
 }
 
 function SRGP_setLineStyle(style: LineStyle) {
-    const { context } = getContext();
+    const { context, drawing } = getContext();
     switch (style) {
         case LineStyle.DASHED:
+            updateContext({
+                drawing: { ...drawing, lineStyle: LineStyle.DASHED },
+            });
             context.setLineDash([4, 4]);
             break;
         case LineStyle.DOTTED:
+            updateContext({
+                drawing: { ...drawing, lineStyle: LineStyle.DOTTED },
+            });
             context.setLineDash([2, 2]);
             break;
         case LineStyle.CONTINUOUS:
         default:
+            updateContext({
+                drawing: { ...drawing, lineStyle: LineStyle.CONTINUOUS },
+            });
             context.setLineDash([]);
             break;
     }
@@ -85,13 +94,51 @@ function SRGP_setColor(colorIndex: ColorIndex) {
     context.strokeStyle = ColorTable[colorIndex];
 }
 
-function SRGP_setFillBitmapPattern(pattern: DrawStyle) {}
+function SRGP_setFillBitmapPattern(pattern: DrawStyle) {
+    const { context, drawing } = getContext();
+    switch (pattern) {
+        case DrawStyle.BitmapPatternOpaque:
+            updateContext({
+                drawing: {
+                    ...drawing,
+                    drawStyle: DrawStyle.BitmapPatternOpaque,
+                },
+            });
+            break;
+        case DrawStyle.BitmapPatternTransparent:
+            updateContext({
+                drawing: {
+                    ...drawing,
+                    drawStyle: DrawStyle.BitmapPatternTransparent,
+                },
+            });
+            break;
+        case DrawStyle.PixmapPattern:
+            updateContext({
+                drawing: {
+                    ...drawing,
+                    drawStyle: DrawStyle.PixmapPattern,
+                },
+            });
+            break;
+        case DrawStyle.Solid:
+        default:
+            updateContext({
+                drawing: {
+                    ...drawing,
+                    drawStyle: DrawStyle.Solid,
+                },
+            });
+    }
+}
 
 function SRGP_setBackgroundColor(colorIndex: ColorIndex) {
     const { context, out } = getContext();
     context.fillStyle = `${ColorTable[colorIndex]}`;
     context.fillRect(0, 0, out.width, out.height);
 }
+
+function SRGP_fillRectangle() {}
 
 // demo programs
 function drawChart() {

@@ -1,6 +1,8 @@
 interface SRGPDrawingContext {
     markerStyle: MarkerStyle;
     markerSize: number;
+    drawStyle: DrawStyle;
+    lineStyle: LineStyle;
 }
 
 export interface SRGPGlobalContext {

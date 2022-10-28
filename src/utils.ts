@@ -5,10 +5,23 @@ export function getContext(): SRGPGlobalContext {
 }
 
 export function updateContext(overrides: any) {
+    const currentContext = (window as any).SRGP_global;
+
+    console.log(
+        "Current context:",
+        currentContext,
+        "Update portion:",
+        overrides,
+    );
+
     (window as any).SRGP_global = {
-        ...(window as any).SRGP_global,
+        ...currentContext,
         ...overrides,
     };
+
+    const newContext = (window as any).SRGP_global;
+
+    console.log("Updated context:", newContext);
 }
 
 export function invertCoords(x: number, y: number) {
